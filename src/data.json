@@ -1,0 +1,387 @@
+{
+  "loginData": [
+    {
+      "id": "1",
+      "user": "Erika",
+      "gender": "female",
+      "password": "123123",
+      "details_id": "312645",
+      "saved_emails": ["ehaeha123@gmail.com", "ugabuga123@abv.bg"],
+      "saved_phone_numbers": ["0894621548"]
+    },
+    {
+      "id": "2",
+      "user": "admin",
+      "gender": "male",
+      "password": "admin",
+      "details_id": "admin",
+      "saved_emails": ["ehaeha123@gmail.com", "ugabuga123@abv.bg"],
+      "saved_phone_numbers": ["0892343785"]
+    }
+  ],
+  "userInfo": [
+    {
+      "id": "admin"
+    }
+  ],
+  "branches": [
+    {
+      "id": 132,
+      "address": "ул. Хан Крум 12, 9000, Варна"
+    },
+    {
+      "id": 515,
+      "address": "ул. Витоша, 1000, София"
+    },
+    {
+      "id": 654,
+      "address": "ул. Цар Ивайло 8, 4000, Пловдив"
+    },
+    {
+      "id": 974,
+      "address": "ул. Цар Борис III, 70, 5800 Плевен"
+    }
+  ],
+  "created_cards": [
+    {
+      "user": "admin",
+      "id": "4523",
+      "cardType": "debit",
+      "cardNumber": "** 9878",
+      "expireDate": "5/25",
+      "24h_limit_withdrawing": 2000,
+      "24h_limit_purchase": 1500,
+      "24h_total_limit": 2500,
+      "status": "active",
+      "clickable": true
+    },
+    {
+      "user": "admin",
+      "id": "5453",
+      "cardType": "credit",
+      "cardNumber": "** 9458",
+      "expireDate": "3/26",
+      "24h_limit_withdrawing": 2000,
+      "24h_limit_purchase": 1500,
+      "24h_total_limit": 2500,
+      "status": "active",
+      "clickable": true
+    },
+    {
+      "user": "admin",
+      "id": "5523",
+      "cardType": "debit",
+      "cardNumber": "** 1938",
+      "expireDate": "4/29",
+      "24h_limit_withdrawing": 2000,
+      "24h_limit_purchase": 1500,
+      "24h_total_limit": 2500,
+      "status": "blocked"
+    },
+    {
+      "user": "admin",
+      "id": "5523",
+      "cardType": "debit",
+      "cardNumber": "** 1938",
+      "expireDate": "4/29",
+      "24h_limit_withdrawing": 2000,
+      "24h_limit_purchase": 1500,
+      "24h_total_limit": 2500,
+      "status": "blocked"
+    }
+  ],
+  "taken_credits": [
+    {
+      "user": "admin",
+      "id": "l4942",
+      "type": "Ипотечен",
+      "primalPrice": 60000,
+      "interest": "3%",
+      "leftAmountToPay": 43523,
+      "thisMonthInstallment": 300,
+      "yearsOfCredit": 20
+    },
+    {
+      "user": "admin",
+      "id": "l9237",
+      "type": "Ипотечен",
+      "primalPrice": 60000,
+      "interest": "3%",
+      "leftAmountToPay": 43523,
+      "thisMonthInstallment": 300,
+      "yearsOfCredit": 1
+    },
+    {
+      "user": "admin",
+      "id": "l8724",
+      "type": "Ипотечен",
+      "primalPrice": 60000,
+      "interest": "3%",
+      "leftAmountToPay": 43523,
+      "thisMonthInstallment": 300,
+      "yearsOfCredit": 20
+    }
+  ],
+  "bank_accounts": [
+    {
+      "user": "admin",
+      "id": "87987",
+      "name": "Разплащателна сметка",
+      "flag": "bg",
+      "currency": "BGN",
+      "balance": 726.6400000000001,
+      "transactions": [
+        {
+          "type": "expense",
+          "date": "23.03.2024",
+          "description": "Maint fee uncollected",
+          "amount": 24.54
+        },
+        {
+          "type": "expense",
+          "date": "27.04.2024",
+          "description": "Payment via 10digit code",
+          "amount": -100
+        },
+        {
+          "type": "expense",
+          "date": "27.04.2024",
+          "description": "Payment via 10digit code",
+          "amount": -55
+        },
+        {
+          "type": "expense",
+          "date": "27.04.2024",
+          "description": "Payment via 10digit code",
+          "amount": -84.05
+        },
+        {
+          "type": "expense",
+          "date": "27.04.2024",
+          "description": "Payment via 10digit code",
+          "amount": -43.54
+        }
+      ]
+    },
+    {
+      "user": "admin",
+      "id": "8787",
+      "name": "Кредитна сметка",
+      "flag": "bg",
+      "currency": "BGN",
+      "balance": 2.990000000000002,
+      "transactions": [
+        {
+          "type": "income",
+          "date": "23.03.2024",
+          "description": "Credit Installment",
+          "amount": 24.54
+        },
+        {
+          "type": "expense",
+          "date": "27.04.2024",
+          "description": "VIVACOM",
+          "amount": -12.54
+        }
+      ]
+    },
+    {
+      "user": "admin",
+      "id": "8987",
+      "name": "Депозитна сметка",
+      "flag": "bg",
+      "currency": "BGN",
+      "balance": 3.3100000000000023,
+      "transactions": [
+        {
+          "type": "expense",
+          "date": "23.03.2024",
+          "description": "Maint fee uncollected",
+          "amount": 24.54
+        },
+        {
+          "type": "expense",
+          "date": "27.04.2024",
+          "description": "VIVACOM",
+          "amount": 23.43
+        },
+        {
+          "type": "expense",
+          "date": "27.04.2024",
+          "description": "Payment via 10digit code",
+          "amount": -23
+        },
+        {
+          "type": "expense",
+          "date": "27.04.2024",
+          "description": "Payment via 10digit code",
+          "amount": -23
+        },
+        {
+          "type": "expense",
+          "date": "27.04.2024",
+          "description": "Payment via 10digit code",
+          "amount": -23
+        }
+      ]
+    },
+    {
+      "id": "f161",
+      "username": "admin"
+    }
+  ],
+  "cashier_requests": [
+    {
+      "user": "admin",
+      "id": "2349",
+      "service": "Withdrawing larger amount of money",
+      "branch": 321,
+      "status": "ready"
+    },
+    {
+      "user": "admin",
+      "id": "2641",
+      "service": "Withdrawing larger amount of money",
+      "branch": 541,
+      "status": "reviewing"
+    },
+    {
+      "user": "admin",
+      "id": "2973",
+      "service": "Withdrawing larger amount of money",
+      "branch": 631,
+      "status": "pending"
+    }
+  ],
+  "user_sessions": [
+    {
+      "id": "3FC58SF54",
+      "user": "admin",
+      "time": "21/3/2023 2:45 PM CET",
+      "location": "Varna, Bulgaria"
+    },
+    {
+      "id": "9JD24AH32",
+      "user": "admin",
+      "time": "14/6/2023 8:30 AM CET",
+      "location": "Sofia, Bulgaria"
+    },
+    {
+      "id": "7KF67JL39",
+      "user": "admin",
+      "time": "5/9/2023 11:15 AM CET",
+      "location": "Plovdiv, Bulgaria"
+    },
+    {
+      "id": "5LH81DS49",
+      "user": "Erika",
+      "time": "18/12/2023 4:00 PM CET",
+      "location": "Burgas, Bulgaria"
+    },
+    {
+      "id": "2EH45FG62",
+      "user": "Erika",
+      "time": "9/2/2024 10:45 AM CET",
+      "location": "Ruse, Bulgaria"
+    }
+  ],
+  "awaiting_payments_via_code": [
+    {
+      "id": "2222222222",
+      "recipient": "VIVACOM INC",
+      "price": 43.54,
+      "currency": "BGN",
+      "endDate": "utre"
+    },
+    {
+      "id": "3333333333",
+      "recipient": "VIVACOM INC",
+      "price": 43.54,
+      "currency": "BGN",
+      "endDate": "utre"
+    },
+    {
+      "id": "4444444444",
+      "recipient": "DOFFENSHMIRTZ EVIL INC",
+      "price": 43.54,
+      "currency": "BGN",
+      "endDate": "utre"
+    },
+    {
+      "id": "4444444444",
+      "recipient": "DOFFENSHMIRTZ EVIL INC",
+      "price": 43.54,
+      "currency": "BGN",
+      "endDate": "utre"
+    },
+    {
+      "id": "5555555555",
+      "recipient": "DOFFENSHMIRTZ EVIL INC",
+      "price": 43.54,
+      "currency": "BGN",
+      "endDate": "utre"
+    }
+  ],
+  "vignettes_pricetable": [
+    {
+      "id": "1m",
+      "text": "1 Месеца",
+      "price": "23",
+      "currency": "BGN"
+    },
+    {
+      "id": "3m",
+      "text": "3 Месеца",
+      "price": "55",
+      "currency": "BGN"
+    },
+    {
+      "id": "6m",
+      "text": "6 Месеца",
+      "price": "100",
+      "currency": "BGN"
+    },
+    {
+      "id": "12m",
+      "text": "12 Месеца",
+      "price": "190",
+      "currency": "BGN"
+    }
+  ],
+  "purchased_vignettes": [
+    {
+      "id": "2",
+      "user": "admin",
+      "type": "1 Месец",
+      "purchaseDate": "5-5-2023",
+      "endDate": "5-6-2023",
+      "carNumber": "B 1943 TM"
+    },
+    {
+      "id": "3",
+      "user": "admin",
+      "type": "1 Месец",
+      "purchaseDate": "5-5-2023",
+      "endDate": "5-6-2023",
+      "carNumber": "B 1943 TM"
+    },
+    {
+      "id": "4",
+      "user": "admin",
+      "type": "1 Месец",
+      "purchaseDate": "5-5-2023",
+      "endDate": "5-6-2023",
+      "carNumber": "B 1943 TM"
+    }
+  ],
+  "tester": [
+    {
+      "id": "45",
+      "age": 198
+    },
+    {
+      "id": "48",
+      "age": 84
+    }
+  ]
+}
