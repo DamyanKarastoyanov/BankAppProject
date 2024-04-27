@@ -9,11 +9,13 @@ import {
   Label,
   Dropdown,
 } from "semantic-ui-react";
+
 let accounts = [
   { name: "Раплащателна сметка", balance: 77.77, currency: "BGN" },
   { name: "Кредитна сметка", balance: 66.66, currency: "EUR" },
   { name: "Депозитна сметка", balance: 55.55, currency: "USD" },
 ];
+
 let accA =
   accounts[0].name + " " + accounts[0].balance + " " + accounts[0].currency;
 let accB =

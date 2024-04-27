@@ -39,14 +39,24 @@ const ConfirmationWindow = ({
         <Button
           color="green"
           inverted
-          onClick={() => {
+          onClick={async () => {
             if (creditCard !== null) {
-              creditCard.clickable = false;
-              creditCard.currentStatus = {
-                icon: btnProps.icon,
-                color: btnProps.color,
-              };
+              let user = JSON.parse(sessionStorage.getItem("username"));
+              delete creditCard.color;
+              delete creditCard.icon;
+              fetch("http://localhost:3002/created_cards/" + creditCard.id, {
+                method: "PATCH",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  ...creditCard,
+                  user,
+                  status: btnProps.action,
+                }),
+              });
             }
+            window.location.reload();
             setOpenConfirmation(false);
             parentState.setOpen(false);
           }}

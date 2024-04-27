@@ -6,8 +6,10 @@ function Navbar() {
   const [activeItem, setActiveItem] = useState();
   const navigate = useNavigate();
   const handleItemClick = (e, { name }) => {
-    if (name === "logout") navigate("/");
-    else {
+    if (name === "logout") {
+      navigate("/");
+      sessionStorage.clear();
+    } else {
       setActiveItem(name);
       navigate("/" + name);
     }

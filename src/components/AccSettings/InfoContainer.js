@@ -6,13 +6,14 @@ import {
   Item,
   Segment,
 } from "semantic-ui-react";
+import useFetch from "../../useFetch";
 
 const EmailCard = ({ email }) => {
   return (
     <Item>
-      <Item.Content header={email.name} />
+      <Item.Content header={email} />
       <ButtonGroup>
-        <Button className="grey-colored-btn" circular icon="edit" />
+        <Button color="yellow" circular icon="edit" />
       </ButtonGroup>
     </Item>
   );
@@ -21,19 +22,25 @@ const EmailCard = ({ email }) => {
 const PhoneCard = ({ phone }) => {
   return (
     <Item>
-      <Item.Content header={phone.number} verticalAlign="middle" />
+      <Item.Content header={phone} verticalAlign="middle" />
       <ButtonGroup>
-        <Button className="grey-colored-btn" circular icon="edit" />
+        <Button color="yellow" circular icon="edit" />
       </ButtonGroup>
     </Item>
   );
 };
 const InfoContainer = () => {
-  let emailList = [
-    { name: "erica041@gmail.com" },
-    { name: "xonudu87@hekuxo.com" },
-  ];
-  let phoneList = [{ number: "0898 898 898" }];
+  let currUser = JSON.parse(sessionStorage.getItem("username"));
+  let { data, loading, error } = useFetch(
+    "http://localhost:3002/loginData?user=" + currUser,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  data && console.log(data);
   return (
     <Segment textAlign="center" className="contact-container">
       <Grid rows={3} id="#acc-settings" className="change-account">
@@ -42,15 +49,15 @@ const InfoContainer = () => {
         </Grid.Row>
         <Grid.Row>
           <Item.Group>
-            {emailList &&
-              emailList.map((email) => {
+            {data &&
+              data[0]["saved_emails"].map((email) => {
                 return <EmailCard email={email} />;
               })}
           </Item.Group>
           <Divider horizontal> Phones</Divider>
           <Item.Group>
-            {phoneList &&
-              phoneList.map((phone) => {
+            {data &&
+              data[0]["saved_phone_numbers"].map((phone) => {
                 return <PhoneCard phone={phone} />;
               })}
           </Item.Group>

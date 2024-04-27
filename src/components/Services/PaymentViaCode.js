@@ -12,131 +12,118 @@ import {
   Modal,
   Segment,
 } from "semantic-ui-react";
-const systemData = [
-  {
-    id: 87987,
-    flag: "bg",
-    currency: "BGN",
-    name: "Разплащателна сметка",
-    balance: 77.77,
-    transactions: [
-      {
-        type: "expense",
-        description: "Maint Fee Uncollected",
-        amount: -24.34,
-        date: "23 march 2024",
-      },
-      {
-        type: "income",
-        description: "Maint Fee Uncollected",
-        amount: 54.39,
-        date: "20 april 2024",
-      },
-      {
-        type: "expense",
-        description: "Maint Fee Uncollected",
-        amount: -8.34,
-        date: "15 may 2024",
-      },
-      {
-        type: "income",
-        description: "Maint Fee Uncollected",
-        amount: 9.67,
-        date: "15 june 2024",
-      },
-    ],
-  },
-  {
-    id: 8787,
-    flag: "bt",
-    currency: "EUR",
-    name: "Кредитна сметка",
-    balance: 66.66,
-    transactions: [
-      {
-        type: "expense",
-        description: "Maint Fee Uncollected",
-        amount: -24.34,
-        date: "23 march 2024",
-      },
-      {
-        type: "expense",
-        description: "Maint Fee Uncollected",
-        amount: -8.34,
-        date: "15 may 2024",
-      },
-      {
-        type: "income",
-        description: "Maint Fee Uncollected",
-        amount: 9.67,
-        date: "15 june 2024",
-      },
-    ],
-  },
-  {
-    id: 8987,
-    flag: "bh",
-    currency: "USD",
-    name: "Депозитна сметка",
-    balance: 55.55,
-    transactions: [
-      {
-        type: "expense",
-        description: "Maint Fee Uncollected",
-        amount: -24.34,
-        date: "23 march 2024",
-      },
-      {
-        type: "income",
-        description: "Maint Fee Uncollected",
-        amount: 54.39,
-        date: "20 april 2024",
-      },
-    ],
-  },
-];
-let options = [
-  { key: 1, text: "", value: 1 },
-  { key: 2, text: "", value: 2 },
-  { key: 3, text: "", value: 3 },
-];
-systemData.map((account, index) => {
-  options[index].key = index + 1;
-  options[index].value = index + 1;
-  options[
-    index
-  ].text = `${account.name}, ${account.balance} ${account.currency}`;
-  return false;
-});
+import { fetchOptions } from "./RequestService/RequestCard";
+import useFetch from "../../useFetch";
 
-let attachedPayments = [
-  { recipient: "Еха ООД", endDate: "29/5/23", price: 24.95, currency: "BGN" },
-];
+export function getFormattedDate() {
+  const today = new Date();
+  const day = String(today.getDate()).padStart(2, "0"); // Get the day and pad with leading zero if necessary
+  const month = String(today.getMonth() + 1).padStart(2, "0"); // Get the month (zero-based) and pad with leading zero if necessary
+  const year = today.getFullYear(); // Get the full year
 
-const AccountSelection = () => (
-  <Dropdown
-    fluid
-    search
-    selection
-    wrapSelection={false}
-    options={options}
-    placeholder="Choose an option"
-  />
-);
+  // Return the formatted date string in dd.mm.yyyy format
+  return `${day}.${month}.${year}`;
+}
+export function findAccountById(accounts, targetId) {
+  for (let i = 0; i < accounts.length; i++) {
+    if (accounts[i].id === targetId) {
+      return accounts[i];
+    }
+  }
+  return null;
+}
 
 const PaymentViaCode = ({ text }) => {
-  let [open, setOpen] = useState(false);
-  let findPayment = (e) => {
-    let neededInputValue = e.target.parentNode.querySelector("div input").value;
-    if (neededInputValue.length >= 10) {
+  const [selectedAccount, setSelectedAccount] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [currPayment, setCurrPayment] = useState(null);
+  const [code, setCode] = useState("");
+  const [isCodeInvalid, setIsCodeInvalid] = useState(false);
+  const [isPaymentSuccess, setIsPaymentSuccess] = useState(false);
+  const [isMissingMoney, setIsMissingMoney] = useState(false);
+  const [accValue, setAccValue] = useState(null);
+  const currUser = JSON.parse(sessionStorage.getItem("username"));
+  const bAccountsRaw = useFetch(
+    "http://localhost:3002/bank_accounts?user=" + currUser,
+    fetchOptions
+  );
+  let formattedBAccounts;
+  if (bAccountsRaw.data) {
+    formattedBAccounts = bAccountsRaw.data.map((account, index) => ({
+      key: account.id,
+      text: `${account.name} - ${account.balance.toFixed(2)} ${
+        account.currency
+      }`,
+      value: account.id,
+    }));
+  }
+
+  const codePaymentRaw = useFetch(
+    "http://localhost:3002/awaiting_payments_via_code",
+    fetchOptions
+  );
+
+  let displayModal = (e) => {
+    setIsCodeInvalid(false);
+    if (codePaymentRaw.data) {
+      if (code.length === 10) {
+        if (codePaymentRaw.data.map((code) => code.id).includes(code)) {
+          codePaymentRaw.data.forEach((payment) => {
+            if (+code === +payment.id) {
+              setCurrPayment(payment);
+              setIsCodeInvalid(false);
+            }
+          });
+        } else {
+        }
+      } else {
+        return false;
+      }
+    }
+    if (isCodeInvalid) {
       setOpen(true);
-    } else {
-      return false;
     }
   };
-  let openBtn = (
-    <Button content="Провери" color="green" onClick={findPayment} />
-  );
+
+  let handlePay = () => {
+    if (selectedAccount.balance >= currPayment.price) {
+      //   -> add a transaction to the history of the said
+      selectedAccount.balance -= currPayment.price;
+      setSelectedAccount(selectedAccount.balance.toFixed(2));
+      selectedAccount.transactions.push({
+        type: "expense",
+        date: getFormattedDate(),
+        description: "Payment via 10digit code",
+        amount: -currPayment.price,
+      });
+      fetch("http://localhost:3002/bank_accounts/" + selectedAccount.id, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(selectedAccount),
+      });
+      codePaymentRaw.data.forEach((payment, index) => {
+        if (+payment.id === code) {
+          codePaymentRaw.data.splice(index, 1);
+        }
+      });
+      fetch(
+        "http://localhost:3002/awaiting_payments_via_code/" + currPayment.id,
+        {
+          method: "DELETE",
+        }
+      );
+
+      setCurrPayment(null);
+      setIsPaymentSuccess(true);
+      //   -> display message about completed
+      setOpen(false);
+    } else {
+      setIsMissingMoney(true);
+      //   -> errorMessage in the dialog saying 'Unsufficient balance.Please change the payment method.
+    }
+  };
   return (
     <div>
       <Header textAlign="center"> {text} </Header>
@@ -145,60 +132,99 @@ const PaymentViaCode = ({ text }) => {
           icon="search"
           placeholder="Enter your code"
           className="pay-with-10-code"
+          onChange={(e) => {
+            setCode(e.target.value);
+          }}
           maxLength={10}
         />{" "}
+        <Header
+          textAlign="center"
+          style={{
+            display: isCodeInvalid || isPaymentSuccess ? "block" : "none",
+          }}
+        >
+          {isCodeInvalid
+            ? "No obligation with the given code was found."
+            : isPaymentSuccess
+            ? "Successful Payment"
+            : " "}
+        </Header>
         <Modal
           onClose={() => setOpen(false)}
-          onOpen={() => findPayment}
+          onOpen={() => setOpen(true)}
           open={open}
-          trigger={openBtn}
+          trigger={
+            <Button content="Провери" color="green" onClick={displayModal} />
+          }
         >
           <Modal.Header className="ui centered">
             {" "}
-            Прикачено плащане с 10 цифрен{" "}
+            Прикачено плащане с 10 цифрен код <br />
+            {currPayment && currPayment.id}
           </Modal.Header>
           <Modal.Content>
-            <Grid
-              columns="equal"
-              textAlign="center"
-              divided
-              className="margin-less"
-            >
+            <Grid columns="equal" textAlign="center" divided>
               <GridRow>
                 <GridColumn>Фирма</GridColumn>
                 <GridColumn>Срок</GridColumn>
                 <GridColumn>Цена</GridColumn>
               </GridRow>
-              {attachedPayments &&
-                attachedPayments.map((payment) => {
-                  return (
-                    <GridRow>
-                      <GridColumn>{payment.recipient}</GridColumn>
-                      <GridColumn>{payment.endDate}</GridColumn>
-                      <GridColumn>
-                        {payment.price + payment.currency}
-                      </GridColumn>
-                    </GridRow>
-                  );
-                })}
+              {currPayment !== null && (
+                <GridRow>
+                  <GridColumn>{currPayment.recipient}</GridColumn>
+                  <GridColumn>{currPayment.endDate}</GridColumn>
+                  <GridColumn>
+                    {currPayment.price + " " + currPayment.currency}
+                  </GridColumn>
+                </GridRow>
+              )}
             </Grid>
             <Divider></Divider> <Label> Избери сметка </Label>
-            <AccountSelection />
+            {bAccountsRaw.data && (
+              <Dropdown
+                required
+                fluid
+                search
+                selection
+                wrapSelection={false}
+                options={formattedBAccounts}
+                onChange={(e, { value }) => {
+                  setAccValue(value);
+                  setSelectedAccount(findAccountById(bAccountsRaw.data, value));
+                  console.log(accValue);
+                }}
+                value={accValue}
+                placeholder="Choose an option"
+              />
+            )}
           </Modal.Content>{" "}
           <Header textAlign="right">
-            {"Общо: " +
-              attachedPayments[0].price +
-              attachedPayments[0].currency}
+            {currPayment !== null &&
+              "Общо: " + currPayment.price + currPayment.currency}
+          </Header>
+          <Header
+            textAlign="right"
+            style={{ display: isMissingMoney ? "block" : "none" }}
+          >
+            Missing missing funds, please select another account.
           </Header>
           <Modal.Actions>
-            <Button color="black" onClick={() => setOpen(false)}>
+            <Button
+              color="black"
+              onClick={() => {
+                setOpen(false);
+                setCurrPayment(null);
+              }}
+            >
               Back
             </Button>
+
             <Button
               content="Pay"
               labelPosition="right"
               icon="money"
-              onClick={() => setOpen(false)}
+              disabled={isCodeInvalid ? true : false}
+              onClick={handlePay}
               positive
             />
           </Modal.Actions>

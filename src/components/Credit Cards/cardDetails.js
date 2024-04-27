@@ -17,6 +17,7 @@ function CardDetails({ creditCard }) {
   const freezeMessage = "Are you sure you want to freeze that card?";
   const blockMessage =
     "Are you sure you want to block that card? \n You won't be able to use this card until its reactivation at bank office";
+  const [isChangeDone, setIsChangeDone] = useState(false);
   return (
     <Modal
       className="cCard-options"
@@ -26,8 +27,8 @@ function CardDetails({ creditCard }) {
       trigger={
         <Button
           circular
-          color={creditCard.currentStatus["color"]}
-          icon={creditCard.currentStatus["icon"]}
+          color={creditCard["color"]}
+          icon={creditCard["icon"]}
         />
       }
     >
@@ -61,33 +62,74 @@ function CardDetails({ creditCard }) {
         <Header> Детайли : </Header>
         <Label>24ч. лимит за теглене в брой </Label>
         <br />
-        <Input labelPosition="right" type="text" placeholder="1500">
+        <Input
+          labelPosition="right"
+          type="text"
+          placeholder={creditCard["24h_limit_withdrawing"]}
+          onChange={(e) => {
+            e.target.value !== creditCard["24h_limit_withdrawing"]
+              ? setIsChangeDone(true)
+              : setIsChangeDone(false);
+          }}
+        >
           <input />
           <Label>BGN</Label>
         </Input>
         <br />
         <Label>24ч. лимит за теглене при търговец </Label>
         <br />
-        <Input labelPosition="right" type="text" placeholder="1500">
+        <Input
+          labelPosition="right"
+          type="text"
+          placeholder={creditCard["24h_limit_purchase"]}
+          onChange={(e) => {
+            e.target.value !== creditCard["24h_limit_purchase"]
+              ? setIsChangeDone(true)
+              : setIsChangeDone(false);
+          }}
+        >
           <input />
           <Label>BGN</Label>
         </Input>
         <br />
         <Label>24ч. общ лимит </Label>
         <br />
-        <Input labelPosition="right" type="text" placeholder="1500">
+        <Input
+          labelPosition="right"
+          type="text"
+          placeholder={creditCard["24h_total_limit"]}
+          onChange={(e) => {
+            e.target.value !== creditCard["24h_total_limit"]
+              ? setIsChangeDone(true)
+              : setIsChangeDone(false);
+          }}
+        >
           <input />
           <Label>BGN</Label>
         </Input>
         <br />
+        {creditCard.status !== "frozen" ? (
+          <ConfirmationWindow
+            btnProps={{
+              icon: "snowflake",
+              content: "Freeze",
+              color: "blue",
+              action: "frozen",
+            }}
+            message={freezeMessage}
+            parentState={{ open, setOpen }}
+            creditCard={creditCard}
+          />
+        ) : (
+          <></>
+        )}
         <ConfirmationWindow
-          btnProps={{ icon: "snowflake", content: "Freeze", color: "blue" }}
-          message={freezeMessage}
-          parentState={{ open, setOpen }}
-          creditCard={creditCard}
-        />
-        <ConfirmationWindow
-          btnProps={{ icon: "ban", content: "Block", color: "red" }}
+          btnProps={{
+            icon: "ban",
+            content: "Block",
+            color: "red",
+            action: "blocked",
+          }}
           message={blockMessage}
           parentState={{ open, setOpen }}
           creditCard={creditCard}
@@ -95,10 +137,11 @@ function CardDetails({ creditCard }) {
       </Modal.Content>
       <Modal.Actions>
         <Button
-          icon="check"
           labelPosition="left"
           content="Save Changes"
-          color="green"
+          icon="check"
+          color={isChangeDone ? "green" : "grey"}
+          disabled={isChangeDone ? false : true}
           onClick={() => setOpen(false)}
         />
       </Modal.Actions>

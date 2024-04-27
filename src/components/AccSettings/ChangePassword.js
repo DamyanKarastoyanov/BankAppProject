@@ -22,9 +22,9 @@ const ChangePassword = () => {
               <Input
                 required
                 type="text"
-                icon="mail"
+                icon="user"
                 iconPosition="left"
-                placeholder="E-mail"
+                placeholder="Current Username"
               />
             </Form.Field>
           </GridRow>

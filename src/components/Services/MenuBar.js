@@ -40,14 +40,13 @@ let actionsList = {
   ),
   "services/withdraw-money": <RequestMoney text="Теглене от каса" />,
   "services/request-debit-card": (
-    <RequestCard text="Request a debit card" type="debit" />
+    <RequestCard text="Заявка за дебитна карта" type="debit" />
   ),
   "services/request-credit-card": (
-    <RequestCard text="Request a credit card" type="credit" />
+    <RequestCard text="Заявка за кредитна карта" type="credit" />
   ),
-  "services/route-cards": <RouteCards text="Маршрутни карти" />,
   "services/complexatory-taxes": (
-    <ComplexatoryTaxes text="Complexatory Taxes" />
+    <ComplexatoryTaxes text="Комплексаторни такси" />
   ),
   "services/print-documents": (
     <PrintDocuments text="Приготвяне на документи за каса" />
@@ -116,12 +115,6 @@ function MenuBar({ currentItem }) {
                 content="Електронни винетки"
                 name="services/e-vignettes"
                 active={activeItem === "services/e-vignettes"}
-                onClick={handleItemClick}
-              />
-              <Menu.Item
-                content="Маршрутни карти"
-                name="services/route-cards"
-                active={activeItem === "services/route-cards"}
                 onClick={handleItemClick}
               />
               <Menu.Item

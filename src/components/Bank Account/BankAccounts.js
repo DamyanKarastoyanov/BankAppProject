@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button, Flag, Grid, GridColumn, Header } from "semantic-ui-react";
 import BAccountDetails from "./BAccountDetails";
+import useFetch from "../../useFetch";
 const AccountsHeader = () => {
   const [isRevealed, setRevealed] = useState(true);
   const revealAccounts = () => {
@@ -50,7 +51,7 @@ const AccountCard = ({ account }) => {
             <Grid.Row>
               <Header textAlign="center" size="large">
                 {account.name} <br />
-                {account.balance + " " + account.currency}
+                {account.balance.toFixed(2) + " " + account.currency}
               </Header>
             </Grid.Row>
           </Grid.Column>
@@ -70,97 +71,26 @@ const AccountCard = ({ account }) => {
 };
 
 const BankAccounts = () => {
-  let [accountList, setAccountList] = useState([
+  let currUser = JSON.parse(sessionStorage.getItem("username"));
+  let { data, loading, error } = useFetch(
+    "http://localhost:3002/bank_accounts?user=" + currUser,
     {
-      id: 87987,
-      flag: "bg",
-      currency: "BGN",
-      name: "Разплащателна сметка",
-      balance: 77.77,
-      transactions: [
-        {
-          type: "expense",
-          description: "Maint Fee Uncollected",
-          amount: -24.34,
-          date: "23 march 2024",
-        },
-        {
-          type: "income",
-          description: "Maint Fee Uncollected",
-          amount: 54.39,
-          date: "20 april 2024",
-        },
-        {
-          type: "expense",
-          description: "Maint Fee Uncollected",
-          amount: -8.34,
-          date: "15 may 2024",
-        },
-        {
-          type: "income",
-          description: "Maint Fee Uncollected",
-          amount: 9.67,
-          date: "15 june 2024",
-        },
-      ],
-    },
-    {
-      id: 8787,
-      flag: "bt",
-      currency: "EUR",
-      name: "Кредитна сметка",
-      balance: 66.66,
-      transactions: [
-        {
-          type: "expense",
-          description: "Maint Fee Uncollected",
-          amount: -24.34,
-          date: "23 march 2024",
-        },
-        {
-          type: "expense",
-          description: "Maint Fee Uncollected",
-          amount: -8.34,
-          date: "15 may 2024",
-        },
-        {
-          type: "income",
-          description: "Maint Fee Uncollected",
-          amount: 9.67,
-          date: "15 june 2024",
-        },
-      ],
-    },
-    {
-      id: 8987,
-      flag: "bh",
-      currency: "USD",
-      name: "Депозитна сметка",
-      balance: 55.55,
-      transactions: [
-        {
-          type: "expense",
-          description: "Maint Fee Uncollected",
-          amount: -24.34,
-          date: "23 march 2024",
-        },
-        {
-          type: "income",
-          description: "Maint Fee Uncollected",
-          amount: 54.39,
-          date: "20 april 2024",
-        },
-      ],
-    },
-  ]);
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  console.log(data);
   // <AddNewBankAccount />
   return (
-    <div class="b-accounts-container">
+    <div className="b-accounts-container">
       <AccountsHeader />
       <div className="accounts-contents">
-        {accountList.map((account) => {
-          return <AccountCard account={account} />;
-        })}
+        {data &&
+          data.map((account) => {
+            return <AccountCard account={account} />;
+          })}
         <Grid columns={3}>
           <Grid.Row>
             <Grid.Column />

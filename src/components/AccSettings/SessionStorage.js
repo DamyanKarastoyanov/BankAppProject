@@ -1,20 +1,19 @@
 import { useState } from "react";
 import { Button, Grid, Table } from "semantic-ui-react";
+import useFetch from "../../useFetch";
 
 const TableExampleSingleLine = () => {
-  let [sessionsList, setSessionList] = useState([
+  let currUser = JSON.parse(sessionStorage.getItem("username"));
+  let { data, loading, error } = useFetch(
+    "http://localhost:3002/user_sessions?user=" + currUser,
     {
-      id: "3FC58SF54",
-      time: "21/3/2023 2:45 PM CET",
-      location: "Varna,Bulgaria",
-    },
-    { id: "9HU5F898K", time: "15/4/2023 11:14 PM CET", location: "Rom, Italy" },
-    {
-      id: "7F489DKE5",
-      time: "3/5/2023 10:43 AM CET",
-      location: "Sofia,Bulgaria",
-    },
-  ]);
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
   return (
     <Table singleLine>
       <Table.Header>
@@ -27,8 +26,8 @@ const TableExampleSingleLine = () => {
       </Table.Header>
 
       <Table.Body>
-        {sessionsList &&
-          sessionsList.map((session) => {
+        {data &&
+          data.map((session) => {
             return (
               <Table.Row textAlign="center">
                 <Table.Cell>{session.id}</Table.Cell>

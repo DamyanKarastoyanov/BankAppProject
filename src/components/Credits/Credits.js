@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Button, Grid, GridColumn, Header } from "semantic-ui-react";
 import CreditDetails from "./CreditDetails";
+import useFetch from "../../useFetch";
+
 const CreditHeader = () => {
   const [isRevealed, setRevealed] = useState(true);
   const revealAccounts = () => {
@@ -63,39 +65,25 @@ const CreditInfo = ({ credit }) => {
 };
 
 const CreditList = () => {
-  let [creaditList, setCreditList] = useState([
+  let currUser = JSON.parse(sessionStorage.getItem("username"));
+  let { data, isLoading, error } = useFetch(
+    "http://localhost:3002/taken_credits?user" + currUser,
     {
-      type: "Ипотечен",
-      interest: "3% лихва",
-      primalPrice: "60000 лв",
-      leftAmountToPay: "52340 лв",
-      thisMonthInstallment: "300.",
-      yearsOfCredit: "20",
-    },
-    {
-      type: "Потребителски",
-      interest: "5% лихва",
-      primalPrice: "3000 лв",
-      leftAmountToPay: "2300 лв",
-      thisMonthInstallment: "200лв.",
-      yearsOfCredit: "1",
-    },
-    {
-      type: "Потребителски",
-      interest: "6% лихва",
-      primalPrice: "5000 лв",
-      leftAmountToPay: "3100 лв",
-      thisMonthInstallment: "200лв.",
-      yearsOfCredit: "2",
-    },
-  ]);
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
   return (
     <div>
       <CreditHeader />
       <div className="credit-List-container">
-        {creaditList.map((credit) => {
-          return <CreditInfo credit={credit} />;
-        })}
+        {data &&
+          data.map((credit) => {
+            return <CreditInfo credit={credit} />;
+          })}
 
         <Grid columns={3}>
           <Grid.Row></Grid.Row>

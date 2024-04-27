@@ -1,22 +1,48 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Form,
   Button,
   Input,
-  Image,
   Grid,
   GridRow,
   GridColumn,
+  Header,
 } from "semantic-ui-react";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "./logo-edited.png";
-import { ListGroup } from "react-bootstrap";
 
 function LoginForm() {
+  const [username, setUsername] = useState(null);
+  const [password, setPassword] = useState(null);
+  const [errMessage, setErrMessage] = useState(null);
   const navigate = useNavigate();
   const redirectPage = () => {
     navigate("account");
   };
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(
+        "http://localhost:3002/loginData?user=" +
+          username +
+          "&password=" +
+          password,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      ).then((res) => res.json());
+      console.log(response);
+      sessionStorage.setItem("username", JSON.stringify(response[0].user));
+      sessionStorage.setItem("gender", JSON.stringify(response[0].gender));
+      redirectPage();
+    } catch (error) {
+      console.error("Error during login:", error);
+      // Handle error
+    }
+  };
+
   return (
     <Grid>
       <GridRow />
@@ -25,18 +51,20 @@ function LoginForm() {
         <GridColumn>
           <div className="login-form">
             <Grid>
-              <GridRow>
-                <Image src={logo} size="small" centered />
+              <GridRow centered>
+                <Header>{errMessage}</Header>
               </GridRow>
-              <GridRow />
               <GridRow centered>
                 <Form.Field width={16}>
                   <Input
                     required
                     type="text"
-                    icon="mail"
+                    icon="user"
                     iconPosition="left"
-                    placeholder="E-mail"
+                    placeholder="Username"
+                    onChange={(e) => {
+                      setUsername(e.target.value);
+                    }}
                   />
                 </Form.Field>
               </GridRow>
@@ -48,11 +76,14 @@ function LoginForm() {
                     icon="key"
                     iconPosition="left"
                     placeholder="Password"
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                    }}
                   />
                 </Form.Field>
               </GridRow>
               <GridRow centered>
-                <Button className="change-password-btn" onClick={redirectPage}>
+                <Button className="change-password-btn" onClick={onSubmit}>
                   Login
                 </Button>
                 <Link to="/forget-password">Forget Password</Link>
