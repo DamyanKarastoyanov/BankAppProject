@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Button, Form, Image, Input, Modal } from "semantic-ui-react";
-import logo from "./logo-edited.png";
 
 const ActivateAccount = () => {
   const navigate = useNavigate();
@@ -11,7 +10,6 @@ const ActivateAccount = () => {
   };
   return (
     <div className="activate-Acc">
-      <Image src={logo} size="small" centered />
       <Form>
         <Form.Field>
           <Input

@@ -14,8 +14,12 @@ import { fetchOptions } from "../RequestService/RequestCard";
 
 let documentOptions = [
   { key: 0, text: "-", value: "hide" },
-  { key: 1, text: "Удостоверение за банкова сметка", value: "show" },
-  { key: 2, text: "Извлечения по сметка", value: "show" },
+  {
+    key: 1,
+    text: "Удостоверение за банкова сметка",
+    value: "Удостоверение за банкова сметка",
+  },
+  { key: 2, text: "Извлечения по сметка", value: "Извлечения по сметка" },
 ];
 
 const PrintDocuments = ({ text }) => {
@@ -48,6 +52,24 @@ const PrintDocuments = ({ text }) => {
       text: `${branch.id} - ${branch.address} `,
       value: branch.id,
     }));
+
+    const handleDocumentRequest = () => {
+      const caseService = {
+        id: Math.floor((Math.random() + 1) * 9999),
+        user: currUser,
+        service: `Document: ${selectedDocument}`,
+        branch: officeValue,
+        status: "reviewing",
+      };
+
+      fetch(`http://localhost:3002/cashier_requests`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(caseService),
+      });
+    };
 
     return (
       <div>
@@ -115,9 +137,12 @@ const PrintDocuments = ({ text }) => {
                   onOpen={() => setOpen(true)}
                   open={open}
                   trigger={
-                    <Grid centered>
-                      <Button content="Заяви" className="grey-colored-btn" />
-                    </Grid>
+                    <Button
+                      content="Заяви"
+                      className="grey-colored-btn"
+                      disabled={!accValue || !officeValue || !selectedDocument}
+                      onClick={handleDocumentRequest}
+                    />
                   }
                 >
                   <Modal.Header>Заявката е изпратена.</Modal.Header>

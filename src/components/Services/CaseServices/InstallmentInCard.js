@@ -12,55 +12,83 @@ import {
   Modal,
   Segment,
 } from "semantic-ui-react";
+import useFetch from "../../../useFetch";
+import { fetchOptions } from "../RequestService/RequestCard";
+import {
+  findAccountById,
+  findCardById,
+  getFormattedDate,
+} from "../PaymentViaCode";
 
-let accounts = [
-  { name: "Раплащателна сметка", balance: 77.77, currency: "BGN" },
-  { name: "Кредитна сметка", balance: 66.66, currency: "EUR" },
-  { name: "Депозитна сметка", balance: 55.55, currency: "USD" },
-];
-let accA =
-  accounts[0].name + " " + accounts[0].balance + " " + accounts[0].currency;
-let accB =
-  accounts[1].name + " " + accounts[1].balance + " " + accounts[1].currency;
-let accC =
-  accounts[2].name + " " + accounts[2].balance + " " + accounts[2].currency;
-
-let accOptions = [
-  { key: 1, text: accA, value: accA },
-  { key: 2, text: accB, value: accB },
-  { key: 3, text: accC, value: accC },
-];
-
-let creditCards = [
-  {
-    id: 5453,
-    cardNumber: "******67 4116",
-    cardType: "Credit Card",
-    expireDate: "10/24",
-  },
-  {
-    id: 5523,
-    cardNumber: "******78 3156",
-    cardType: "Credit Card",
-    expireDate: "2/27",
-  },
-];
-let creditCardOptions = [
-  {
-    key: 1,
-    text: `${creditCards[0].cardNumber}, ${creditCards[0].expireDate}`,
-    value: `${creditCards[0].cardNumber}, ${creditCards[0].expireDate}`,
-  },
-  {
-    key: 2,
-    text: `${creditCards[1].cardNumber}, ${creditCards[1].expireDate}`,
-    value: `${creditCards[1].cardNumber}, ${creditCards[1].expireDate}`,
-  },
-];
 const InstallmentInCard = ({ text }) => {
   let [open, setOpen] = useState(false);
   let [accValue, setAccValue] = useState(null);
   let [creditCardValue, setCreditCardValue] = useState(null);
+  const [selectedAccount, setSelectedAccount] = useState(null);
+  const [selectedCard, setSelectedCard] = useState(null);
+  const [moneyValue, setMoneyValue] = useState(null);
+
+  const currUser = JSON.parse(sessionStorage.getItem("username"));
+
+  const bAccountsRaw = useFetch(
+    "http://localhost:3002/bank_accounts?user=" + currUser,
+    fetchOptions
+  );
+  let formattedBAccounts;
+  if (bAccountsRaw.data) {
+    formattedBAccounts = bAccountsRaw.data.map((account, index) => ({
+      key: account.id,
+      text: `${account.name} - ${account.balance.toFixed(2)} ${
+        account.currency
+      }`,
+      value: account.id,
+    }));
+  }
+  const creditCardsRaw = useFetch(
+    "http://localhost:3002/created_cards?user=" + currUser,
+    fetchOptions
+  );
+  let creditCardOptions;
+  if (creditCardsRaw.data) {
+    creditCardOptions = creditCardsRaw.data.map((card, index) => ({
+      key: card.id,
+      text: `${card.cardNumber} - ${card["current_balance"]} BGN`,
+      value: card.id,
+    }));
+  }
+
+  const handleCreditCardRecharge = () => {
+    // check money <= account.balance
+    if (moneyValue <= selectedAccount.balance) {
+      // -> substract the value in account balance
+      selectedAccount.balance -= moneyValue;
+      // -> add the value in credit card
+      selectedCard["current_balance"] += moneyValue;
+      // -> add transaction regarding that
+      selectedAccount.transactions.push({
+        type: "expense",
+        date: getFormattedDate(),
+        description: `Recharging credit card ${selectedCard.cardNumber}`,
+        amount: -moneyValue,
+      });
+      fetch("http://localhost:3002/bank_accounts/" + selectedAccount.id, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(selectedAccount),
+      });
+      fetch("http://localhost:3002/created_cards/" + selectedCard.id, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(selectedCard),
+      });
+      setOpen(true);
+      // ->
+    }
+  };
   return (
     <div>
       {" "}
@@ -79,9 +107,12 @@ const InstallmentInCard = ({ text }) => {
                       search
                       selection
                       wrapSelection={true}
-                      options={accOptions}
+                      options={formattedBAccounts}
                       onChange={(e, { value }) => {
                         setAccValue(value);
+                        setSelectedAccount(
+                          findAccountById(bAccountsRaw.data, value)
+                        );
                       }}
                       value={accValue}
                       placeholder="Избери сметка"
@@ -93,7 +124,7 @@ const InstallmentInCard = ({ text }) => {
                 </GridColumn>
                 <GridColumn width={7}>
                   <Form.Field>
-                    <Label>Внасяне в кредитна карта</Label>
+                    <Label>Внасяне в карта</Label>
                     <Dropdown
                       required
                       fluid
@@ -103,6 +134,9 @@ const InstallmentInCard = ({ text }) => {
                       options={creditCardOptions}
                       onChange={(e, { value }) => {
                         setCreditCardValue(value);
+                        setSelectedCard(
+                          findCardById(creditCardsRaw.data, value)
+                        );
                       }}
                       value={creditCardValue}
                       placeholder="Избери картата"
@@ -116,40 +150,42 @@ const InstallmentInCard = ({ text }) => {
                   <Form.Input
                     labelPosition="right"
                     type="text"
-                    
-                  >
-                    <input />
-                    <Label>лв.</Label>
-                  </Form.Input>
+                    value={moneyValue}
+                    onChange={(e) => {
+                      setMoneyValue(e.target.value);
+                    }}
+                  />
+                  <Label>лв.</Label>
                 </Form.Field>
               </GridRow>
             </Grid>
-            <Form.Field width={7}>
-              <Modal
-                onClose={() => setOpen(false)}
-                onOpen={() => setOpen(true)}
-                open={open}
-                trigger={
-                  <Grid centered>
-                    <Button content="Внеси" className="grey-colored-btn" />
-                  </Grid>
-                }
-              >
-                <Modal.Header>Вноската е успешна.</Modal.Header>
-                <Modal.Actions>
-                  <Button
-                    content="Okey"
-                    labelPosition="right"
-                    icon="checkmark"
-                    className="grey-colored-btn"
-                    onClick={() => setOpen(false)}
-                    positive
-                  />
-                </Modal.Actions>
-              </Modal>
-            </Form.Field>
+            <Grid centered>
+              <Button
+                content="Внеси"
+                className="grey-colored-btn"
+                onClick={handleCreditCardRecharge}
+                disabled={!accValue || !moneyValue || !creditCardValue}
+              />
+            </Grid>
           </Form.Group>
         </Form>
+        <Modal
+          onClose={() => setOpen(false)}
+          onOpen={() => setOpen(true)}
+          open={open}
+        >
+          <Modal.Header>Вноската е успешна.</Modal.Header>
+          <Modal.Actions>
+            <Button
+              content="Okey"
+              labelPosition="right"
+              icon="checkmark"
+              className="grey-colored-btn"
+              onClick={() => setOpen(false)}
+              positive
+            />
+          </Modal.Actions>
+        </Modal>
       </Segment>
     </div>
   );

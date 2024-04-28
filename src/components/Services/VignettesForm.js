@@ -58,10 +58,9 @@ const VignettesForm = ({ text }) => {
   const [accValue, setAccValue] = useState(null);
   const [isPaymentSuccess, setIsPaymentSuccess] = useState(false);
   const [isMissingMoney, setIsMissingMoney] = useState(false);
+  const [carNumber, setCarNumber] = useState(null);
 
   const handlePayVignette = () => {
-    console.log(currVignette);
-    console.log(selectedAccount);
     // check if balance is enough
     if (+currVignette.price <= +selectedAccount.balance) {
       // -> add transaction to bank account
@@ -81,12 +80,23 @@ const VignettesForm = ({ text }) => {
         body: JSON.stringify(selectedAccount),
       });
       const newVignette = {
-        
-      }
+        user: currUser,
+        id: Math.floor(Math.random() * 100000 + 1),
+        startDate: getFormattedDate(),
+        endDate: getFormattedDate(currVignette.durationInMonths),
+        amountOfMonths: currVignette.durationInMonths,
+        carNumber,
+      };
       // -> display message " Vignette is successfully purchased."
-      setIsPaymentSuccess(true);
       // -> add it on the e-vignette list in the JSON
-      // -> clear the fields in the form
+      fetch("http://localhost:3002/vignettes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newVignette),
+      });
+      setIsPaymentSuccess(true);
     } else {
       // -> display message 'Unsufficient balance, change the
       setIsMissingMoney(true);
@@ -101,7 +111,14 @@ const VignettesForm = ({ text }) => {
           <Form.Group grouped>
             <Form.Field width={7}>
               <Label>Номер на колата</Label>
-              <Form.Input required readonly></Form.Input>
+              <Form.Input
+                required
+                readonly
+                maxLength={7}
+                onChange={(e) => {
+                  setCarNumber(e.target.value);
+                }}
+              ></Form.Input>
             </Form.Field>
             <Form.Field width={7}>
               <Label>Продължителност</Label>
@@ -149,33 +166,46 @@ const VignettesForm = ({ text }) => {
                 />
               )}
             </Form.Field>
-
             <Grid centered>
               <Form.Field width={7}>
-                <Button
-                  content="Купи Е-Винетка"
-                  onClick={handlePayVignette}
-                  className="grey-colored-btn"
-                />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Button
+                    content="Купи Е-Винетка"
+                    onClick={handlePayVignette}
+                    className="grey-colored-btn"
+                    disabled={
+                      !accValue || !selVignetteValue || !selectedAccount
+                    }
+                  />
+                </div>
               </Form.Field>
               <Grid.Row>
                 <Header
                   textAlign="center"
                   style={{
-                    display:
-                      isPaymentSuccess || isMissingMoney ? "block" : "none",
+                    display: isPaymentSuccess ? "block" : "none",
                   }}
                 >
-                  {isMissingMoney
-                    ? "Недостатъчна наличност в сметката. Моля посочете друга"
-                    : isPaymentSuccess
+                  {isPaymentSuccess
                     ? "Винетката беше закупена успешно, за повече информация, отворете прозореца за проверка"
                     : " "}
                 </Header>
                 <Header
                   textAlign="center"
-                  style={{ display: isMissingMoney ? "block" : "none" }}
-                ></Header>
+                  style={{
+                    display: isMissingMoney ? "block" : "none",
+                  }}
+                >
+                  {isMissingMoney
+                    ? "Недостатъчна наличност в сметката. Моля посочете друга"
+                    : " "}
+                </Header>
               </Grid.Row>
             </Grid>
           </Form.Group>
@@ -186,3 +216,5 @@ const VignettesForm = ({ text }) => {
 };
 
 export default VignettesForm;
+
+//

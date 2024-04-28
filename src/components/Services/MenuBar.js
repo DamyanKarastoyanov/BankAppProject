@@ -2,35 +2,20 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Grid, Menu, Segment } from "semantic-ui-react";
 import PaymentViaCode from "./PaymentViaCode";
-import AwaitingObligations from "./AwaitingObligations";
-import ObligationList from "./ObligationList";
-import RegisterObligation from "./RegisterObligation";
 import VignettesForm from "./VignettesForm";
 import MyVignettes from "./MyVignettes";
 import BigAmounts from "./CaseServices/BigAmounts";
 import RequestCard from "./RequestService/RequestCard";
 import RequestMoney from "./CaseServices/RequestMoney";
-import RouteCards from "./CaseServices/RouteCards";
-import ComplexatoryTaxes from "./ComplexatoryTaxes";
 import PrintDocuments from "./CaseServices/PrintDocuments";
 import InstallmentInCredit from "./CaseServices/InstallmentInCredit";
 import InstallmentInCard from "./CaseServices/InstallmentInCard";
 import RequestCredit from "./RequestService/RequestCredit";
 import RequestMortgage from "./RequestService/RequestMortgage";
-import Installment from "./CaseServices/Installment";
 
 let actionsList = {
   services: "",
   "services/pay-with-code": <PaymentViaCode text="Плащане с 10 цифрен код" />,
-  "services/awaiting-obligations": (
-    <AwaitingObligations text="Задължения за плащане" />
-  ),
-  "services/obligation-list": (
-    <ObligationList text="Всички задължения по акаунта ви" />
-  ),
-  "services/register-obligation": (
-    <RegisterObligation text="Регистриране на задължения" />
-  ),
   "services/e-vignettes": <VignettesForm text="Електронни Винетки" />,
   "services/vignettes-valid-check": (
     <MyVignettes text="Преглед на валидност за винетка" />
@@ -45,9 +30,6 @@ let actionsList = {
   "services/request-credit-card": (
     <RequestCard text="Заявка за кредитна карта" type="credit" />
   ),
-  "services/complexatory-taxes": (
-    <ComplexatoryTaxes text="Комплексаторни такси" />
-  ),
   "services/print-documents": (
     <PrintDocuments text="Приготвяне на документи за каса" />
   ),
@@ -59,7 +41,6 @@ let actionsList = {
   ),
   "services/request-user-credit": <RequestCredit text="Потребителски кредит" />,
   "services/request-mortgage": <RequestMortgage text="Ипотечен кредит" />,
-  "services/installment": <Installment text="Вноска на каса" />,
 };
 
 function MenuBar({ currentItem }) {
@@ -86,24 +67,6 @@ function MenuBar({ currentItem }) {
                 active={activeItem === "services/pay-with-code"}
                 onClick={handleItemClick}
               />
-              <Menu.Item
-                content="Задължения по сметка/ЕГН"
-                name="services/awaiting-obligations"
-                active={activeItem === "services/awaiting-obligations"}
-                onClick={handleItemClick}
-              />
-              <Menu.Item
-                content="Регистриране на задължения"
-                name="services/register-obligation"
-                active={activeItem === "services/register-obligation"}
-                onClick={handleItemClick}
-              />
-              <Menu.Item
-                content="Преглед на всички задължения"
-                name="services/obligation-list"
-                active={activeItem === "services/obligation-list"}
-                onClick={handleItemClick}
-              />
             </Menu.Menu>
           </Menu.Item>
 
@@ -115,12 +78,6 @@ function MenuBar({ currentItem }) {
                 content="Електронни винетки"
                 name="services/e-vignettes"
                 active={activeItem === "services/e-vignettes"}
-                onClick={handleItemClick}
-              />
-              <Menu.Item
-                content="Комплексаторни такси"
-                name="services/complexatory-taxes"
-                active={activeItem === "services/complexatory-taxes"}
                 onClick={handleItemClick}
               />
               <Menu.Item
@@ -152,12 +109,6 @@ function MenuBar({ currentItem }) {
                 content="Приготвяне на документи"
                 name="services/print-documents"
                 active={activeItem === "services/print-documents"}
-                onClick={handleItemClick}
-              />
-              <Menu.Item
-                content="Вноска на каса"
-                name="services/installment"
-                active={activeItem === "services/installment"}
                 onClick={handleItemClick}
               />
               <Menu.Item

@@ -41,33 +41,8 @@ const routerConfig = [
         ],
       },
       {
-        path: "register-obligation",
-        element: [
-          <Navbar />,
-          <MenuBar currentItem="services/register-obligation" />,
-        ],
-      },
-      {
-        path: "obligation-list",
-        element: [
-          <Navbar />,
-          <MenuBar currentItem="services/obligation-list" />,
-        ],
-      },
-      {
         path: "e-vignettes",
         element: [<Navbar />, <MenuBar currentItem="services/e-vignettes" />],
-      },
-      {
-        path: "route-cards",
-        element: [<Navbar />, <MenuBar currentItem="services/route-cards" />],
-      },
-      {
-        path: "complexatory-taxes",
-        element: [
-          <Navbar />,
-          <MenuBar currentItem="services/complexatory-taxes" />,
-        ],
       },
       {
         path: "vignettes-valid-check",

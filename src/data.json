@@ -49,6 +49,7 @@
       "cardType": "debit",
       "cardNumber": "** 9878",
       "expireDate": "5/25",
+      "current_balance": 20.3,
       "24h_limit_withdrawing": 2000,
       "24h_limit_purchase": 1500,
       "24h_total_limit": 2500,
@@ -61,10 +62,11 @@
       "cardType": "credit",
       "cardNumber": "** 9458",
       "expireDate": "3/26",
+      "current_balance": "10.31212",
       "24h_limit_withdrawing": 2000,
       "24h_limit_purchase": 1500,
       "24h_total_limit": 2500,
-      "status": "active",
+      "status": "frozen",
       "clickable": true
     },
     {
@@ -73,17 +75,7 @@
       "cardType": "debit",
       "cardNumber": "** 1938",
       "expireDate": "4/29",
-      "24h_limit_withdrawing": 2000,
-      "24h_limit_purchase": 1500,
-      "24h_total_limit": 2500,
-      "status": "blocked"
-    },
-    {
-      "user": "admin",
-      "id": "5523",
-      "cardType": "debit",
-      "cardNumber": "** 1938",
-      "expireDate": "4/29",
+      "current_balance": 29.3,
       "24h_limit_withdrawing": 2000,
       "24h_limit_purchase": 1500,
       "24h_total_limit": 2500,
@@ -93,33 +85,33 @@
   "taken_credits": [
     {
       "user": "admin",
-      "id": "l4942",
-      "type": "Ипотечен",
-      "primalPrice": 60000,
-      "interest": "3%",
-      "leftAmountToPay": 43523,
-      "thisMonthInstallment": 300,
-      "yearsOfCredit": 20
+      "id": "l2331",
+      "type": "Потребителски",
+      "primalPrice": 2000,
+      "interest": "5%",
+      "leftAmountToPay": 815,
+      "thisMonthInstallment": 100,
+      "yearsOfCredit": 2
     },
     {
       "user": "admin",
-      "id": "l9237",
-      "type": "Ипотечен",
-      "primalPrice": 60000,
-      "interest": "3%",
-      "leftAmountToPay": 43523,
-      "thisMonthInstallment": 300,
-      "yearsOfCredit": 1
+      "id": "l3987",
+      "type": "Автомобилен",
+      "primalPrice": 3000,
+      "interest": "4%",
+      "leftAmountToPay": 363,
+      "thisMonthInstallment": 150,
+      "yearsOfCredit": 3
     },
     {
       "user": "admin",
-      "id": "l8724",
-      "type": "Ипотечен",
-      "primalPrice": 60000,
-      "interest": "3%",
-      "leftAmountToPay": 43523,
-      "thisMonthInstallment": 300,
-      "yearsOfCredit": 20
+      "id": "l7548",
+      "type": "Личен",
+      "primalPrice": 5000,
+      "interest": "4%",
+      "leftAmountToPay": 4500,
+      "thisMonthInstallment": 200,
+      "yearsOfCredit": 5
     }
   ],
   "bank_accounts": [
@@ -129,7 +121,7 @@
       "name": "Разплащателна сметка",
       "flag": "bg",
       "currency": "BGN",
-      "balance": 726.6400000000001,
+      "balance": 9342,
       "transactions": [
         {
           "type": "expense",
@@ -145,21 +137,21 @@
         },
         {
           "type": "expense",
-          "date": "27.04.2024",
-          "description": "Payment via 10digit code",
-          "amount": -55
+          "date": "28.04.2024",
+          "description": "Recharging credit card ** 9458",
+          "amount": -12
         },
         {
           "type": "expense",
-          "date": "27.04.2024",
-          "description": "Payment via 10digit code",
-          "amount": -84.05
+          "date": "28.04.2024",
+          "description": "E-vignettes",
+          "amount": -23
         },
         {
           "type": "expense",
-          "date": "27.04.2024",
-          "description": "Payment via 10digit code",
-          "amount": -43.54
+          "date": "28.04.2024",
+          "description": "Вноска 200 в Потребителски",
+          "amount": -200
         }
       ]
     },
@@ -169,7 +161,7 @@
       "name": "Кредитна сметка",
       "flag": "bg",
       "currency": "BGN",
-      "balance": 2.990000000000002,
+      "balance": 7615.459999999999,
       "transactions": [
         {
           "type": "income",
@@ -182,6 +174,12 @@
           "date": "27.04.2024",
           "description": "VIVACOM",
           "amount": -12.54
+        },
+        {
+          "type": "expense",
+          "date": "28.04.2024",
+          "description": "Вноска 141 в Автомобилен",
+          "amount": -141
         }
       ]
     },
@@ -191,7 +189,7 @@
       "name": "Депозитна сметка",
       "flag": "bg",
       "currency": "BGN",
-      "balance": 3.3100000000000023,
+      "balance": 9999,
       "transactions": [
         {
           "type": "expense",
@@ -210,47 +208,24 @@
           "date": "27.04.2024",
           "description": "Payment via 10digit code",
           "amount": -23
-        },
-        {
-          "type": "expense",
-          "date": "27.04.2024",
-          "description": "Payment via 10digit code",
-          "amount": -23
-        },
-        {
-          "type": "expense",
-          "date": "27.04.2024",
-          "description": "Payment via 10digit code",
-          "amount": -23
         }
       ]
-    },
-    {
-      "id": "f161",
-      "username": "admin"
     }
   ],
   "cashier_requests": [
     {
+      "id": 12114,
       "user": "admin",
-      "id": "2349",
-      "service": "Withdrawing larger amount of money",
-      "branch": 321,
-      "status": "ready"
-    },
-    {
-      "user": "admin",
-      "id": "2641",
-      "service": "Withdrawing larger amount of money",
-      "branch": 541,
+      "service": "Large withdrawing 3000 BGN",
+      "branch": 515,
       "status": "reviewing"
     },
     {
+      "id": 14007,
       "user": "admin",
-      "id": "2973",
-      "service": "Withdrawing larger amount of money",
-      "branch": 631,
-      "status": "pending"
+      "service": "Document: Удостоверение за банкова сметка",
+      "branch": 515,
+      "status": "reviewing"
     }
   ],
   "user_sessions": [
@@ -287,13 +262,6 @@
   ],
   "awaiting_payments_via_code": [
     {
-      "id": "2222222222",
-      "recipient": "VIVACOM INC",
-      "price": 43.54,
-      "currency": "BGN",
-      "endDate": "utre"
-    },
-    {
       "id": "3333333333",
       "recipient": "VIVACOM INC",
       "price": 43.54,
@@ -301,7 +269,7 @@
       "endDate": "utre"
     },
     {
-      "id": "4444444444",
+      "id": "2222222222",
       "recipient": "DOFFENSHMIRTZ EVIL INC",
       "price": 43.54,
       "currency": "BGN",
@@ -327,51 +295,79 @@
       "id": "1m",
       "text": "1 Месеца",
       "price": "23",
-      "currency": "BGN"
+      "currency": "BGN",
+      "durationInMonths": 1
     },
     {
       "id": "3m",
       "text": "3 Месеца",
       "price": "55",
-      "currency": "BGN"
+      "currency": "BGN",
+      "durationInMonths": 3
     },
     {
       "id": "6m",
       "text": "6 Месеца",
       "price": "100",
-      "currency": "BGN"
+      "currency": "BGN",
+      "durationInMonths": 6
     },
     {
       "id": "12m",
       "text": "12 Месеца",
       "price": "190",
-      "currency": "BGN"
+      "currency": "BGN",
+      "durationInMonths": 12
     }
   ],
-  "purchased_vignettes": [
+  "vignettes": [
     {
-      "id": "2",
       "user": "admin",
-      "type": "1 Месец",
-      "purchaseDate": "5-5-2023",
-      "endDate": "5-6-2023",
-      "carNumber": "B 1943 TM"
+      "id": "v49584",
+      "startDate": "5.5.2024",
+      "endDate": "5.11.2024",
+      "amountOfMonths": 6,
+      "carNumber": "C 1627 KM"
     },
     {
-      "id": "3",
       "user": "admin",
-      "type": "1 Месец",
-      "purchaseDate": "5-5-2023",
-      "endDate": "5-6-2023",
-      "carNumber": "B 1943 TM"
+      "id": "v49284",
+      "startDate": "5.5.2024",
+      "endDate": "5.5.2025",
+      "amountOfMonths": 12,
+      "carNumber": "B 9527 KM"
     },
     {
-      "id": "4",
       "user": "admin",
-      "type": "1 Месец",
-      "purchaseDate": "5-5-2023",
-      "endDate": "5-6-2023",
-      "carNumber": "B 1943 TM"
+      "id": "v49528",
+      "startDate": "5.5.2024",
+      "endDate": "5.8.2024",
+      "amountOfMonths": 3,
+      "carNumber": "П 6587 KM"
+    },
+    {
+      "id": 74254,
+      "user": "admin",
+      "startDate": "28.04.2024",
+      "endDate": "28.07.2024",
+      "amountOfMonths": 3,
+      "carNumber": "B 1987 BM"
+    },
+    {
+      "id": 1689,
+      "user": "admin",
+      "startDate": "28.04.2024",
+      "endDate": "28.07.2024",
+      "amountOfMonths": 3,
+      "carNumber": "B 1987 BM"
+    },
+    {
+      "id": 6275,
+      "user": "admin",
+      "startDate": "28.04.2024",
+      "endDate": "28.07.2024",
+      "amountOfMonths": 3,
+      "carNumber": "B 1987 BM"
     }
   ],
   "tester": [

@@ -86,9 +86,6 @@ function LoginForm() {
                 <Button className="change-password-btn" onClick={onSubmit}>
                   Login
                 </Button>
-                <Link to="/forget-password">Forget Password</Link>
-                <Link to="/activate-account">Activate Account</Link>
-                <Link to="/terms">Terms of Service</Link>
               </GridRow>
             </Grid>
           </div>

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import {
   Button,
-  Checkbox,
   Dropdown,
   Form,
   Grid,
@@ -13,76 +12,95 @@ import {
   Modal,
   Segment,
 } from "semantic-ui-react";
+import useFetch from "../../../useFetch";
+import { fetchOptions } from "../RequestService/RequestCard";
+import { findAccountById, getFormattedDate } from "../PaymentViaCode";
 
-let credits = [
-  {
-    type: "Ипотечен",
-    interest: "3% лихва",
-    primalPrice: "60000 лв",
-    leftAmountToPay: "52340 лв",
-    thisMonthInstallment: "300.",
-    yearsOfCredit: "20",
-  },
-  {
-    type: "Потребителски",
-    interest: "5% лихва",
-    primalPrice: "3000 лв",
-    leftAmountToPay: "2300 лв",
-    thisMonthInstallment: "200лв.",
-    yearsOfCredit: "1",
-  },
-  {
-    type: "Потребителски",
-    interest: "6% лихва",
-    primalPrice: "5000 лв",
-    leftAmountToPay: "3100 лв",
-    thisMonthInstallment: "200лв.",
-    yearsOfCredit: "2",
-  },
-];
-let creditOptions = [
-  {
-    key: 1,
-    text: `Ипотечен, ${credits[0].leftAmountToPay}`,
-    value: 300,
-  },
-  {
-    key: 2,
-    text: `Потребителски, ${credits[1].leftAmountToPay}`,
-    value: 200,
-  },
-  {
-    key: 3,
-    text: `Потребителски, ${credits[2].leftAmountToPay}`,
-    value: 200,
-  },
-];
-let documentOptions = [
-  { key: 0, text: "-", value: "hide" },
-  { key: 1, text: "Удостоверение за банкова сметка", value: "show" },
-  { key: 2, text: "Извлечения по сметка", value: "show" },
-];
-let accounts = [
-  { name: "Раплащателна сметка", balance: 77.77, currency: "BGN" },
-  { name: "Кредитна сметка", balance: 66.66, currency: "EUR" },
-  { name: "Депозитна сметка", balance: 55.55, currency: "USD" },
-];
-let accA =
-  accounts[0].name + " " + accounts[0].balance + " " + accounts[0].currency;
-let accB =
-  accounts[1].name + " " + accounts[1].balance + " " + accounts[1].currency;
-let accC =
-  accounts[2].name + " " + accounts[2].balance + " " + accounts[2].currency;
-
-let accOptions = [
-  { key: 1, text: accA, value: accA },
-  { key: 2, text: accB, value: accB },
-  { key: 3, text: accC, value: accC },
-];
+export function findCreditById(credits, targetId) {
+  for (let i = 0; i < credits.length; i++) {
+    if (credits[i].id === targetId) {
+      return credits[i];
+    }
+  }
+  return null;
+}
 const InstallmentInCredit = ({ text }) => {
   let [open, setOpen] = useState(false);
   let [accValue, setAccValue] = useState(null);
-  let [selectedCredit, setSelectedCedit] = useState(null);
+  let [selectedCreditValue, setSelectedCreditValue] = useState(null);
+  let [selectedCredit, setSelectedCredit] = useState(null);
+  const [selectedAccount, setSelectedAccount] = useState(null);
+  let [moneyValue, setValue] = useState(null);
+  const currUser = JSON.parse(sessionStorage.getItem("username"));
+
+  const bAccountsRaw = useFetch(
+    "http://localhost:3002/bank_accounts?user=" + currUser,
+    fetchOptions
+  );
+
+  let bankAccountsOptions;
+  if (bAccountsRaw.data) {
+    bankAccountsOptions = bAccountsRaw.data.map((account, index) => ({
+      key: account.id,
+      text: `${account.name} - ${account.balance.toFixed(2)} ${
+        account.currency
+      }`,
+      value: account.id,
+    }));
+  }
+
+  const creditsRaw = useFetch(
+    "http://localhost:3002/taken_credits?user=" + currUser,
+    fetchOptions
+  );
+
+  let creditsOptions;
+  if (creditsRaw.data) {
+    creditsOptions = creditsRaw.data.map((credit, index) => ({
+      key: credit.id,
+      text: `${credit.type} - ${credit.leftAmountToPay} `,
+      value: credit.id,
+    }));
+  }
+
+  const handleCreditInstallment = () => {
+    if (
+      selectedAccount.balance >= moneyValue &&
+      moneyValue < selectedCredit.leftAmountToPay
+    ) {
+      selectedAccount.balance -= moneyValue;
+      selectedCredit.leftAmountToPay -= moneyValue;
+
+      setSelectedAccount(selectedAccount.balance.toFixed(2));
+      selectedAccount.transactions.push({
+        type: "expense",
+        date: getFormattedDate(),
+        description: `Вноска ${moneyValue} в ${selectedCredit.type}`,
+        amount: -moneyValue,
+      });
+      fetch("http://localhost:3002/bank_accounts/" + selectedAccount.id, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(selectedAccount),
+      });
+      fetch("http://localhost:3002/taken_credits/" + selectedCredit.id, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(selectedCredit),
+      });
+      setOpen(true);
+    }
+    // check money -> account.balance
+
+    // -> if true
+    // substact value of the account.balance
+    // add transaction to the account & fetch it
+    // reduce credit remainAmount & fetch it
+  };
   return (
     <div>
       {" "}
@@ -101,9 +119,12 @@ const InstallmentInCredit = ({ text }) => {
                       search
                       selection
                       wrapSelection={true}
-                      options={accOptions}
+                      options={bankAccountsOptions}
                       onChange={(e, { value }) => {
                         setAccValue(value);
+                        setSelectedAccount(
+                          findAccountById(bAccountsRaw.data, value)
+                        );
                       }}
                       value={accValue}
                       placeholder="Избери сметка"
@@ -122,56 +143,77 @@ const InstallmentInCredit = ({ text }) => {
                       search
                       selection
                       wrapSelection={true}
-                      options={creditOptions}
+                      disabled={!accValue}
+                      options={creditsOptions}
                       onChange={(e, { value }) => {
-                        setSelectedCedit(value);
+                        setSelectedCreditValue(value);
+                        setSelectedCredit(
+                          findCreditById(creditsRaw.data, value)
+                        );
                       }}
-                      value={selectedCredit}
+                      value={selectedCreditValue}
                       placeholder="Избери кредита"
                     />
                   </Form.Field>
                 </GridColumn>
               </GridRow>
               <GridRow centered>
-                <Form.Field width={4}>
-                  <Label>Въведи сума:</Label>
+                <Form.Field width={7}>
+                  <Label>Посочи сума:</Label>
                   <Form.Input
-                    labelPosition="right"
-                    type="text"
-                    
-                    value={selectedCredit}
-                  >
-                    <input />
-                    <Label>лв.</Label>
-                  </Form.Input>
+                    icon="money"
+                    iconPosition="right"
+                    type="number"
+                    disabled={!accValue || !selectedCreditValue}
+                    onChange={(e) => {
+                      let currValue = e.target.value;
+                      if (selectedAccount.balance < currValue) {
+                        currValue = selectedAccount.balance;
+                      }
+                      setValue(currValue);
+                    }}
+                  />
                 </Form.Field>
               </GridRow>
             </Grid>
             <Form.Field width={7}>
-              <Modal
-                onClose={() => setOpen(false)}
-                onOpen={() => setOpen(true)}
-                open={open}
-                className="grey-colored-btn"
-                trigger={
-                  <Grid centered>
-                    <Button content="Внеси" className="grey-colored-btn" />
-                  </Grid>
-                }
-              >
-                <Modal.Header>Вноската е успешна.</Modal.Header>
-                <Modal.Actions>
-                  <Button
-                    content="Okey"
-                    labelPosition="right"
-                    icon="checkmark"
-                    className="grey-colored-btn"
-                    onClick={() => setOpen(false)}
-                  />
-                </Modal.Actions>
-              </Modal>
+              <Grid centered>
+                <Button
+                  content="Внеси"
+                  className="grey-colored-btn"
+                  onClick={handleCreditInstallment}
+                  disabled={!accValue || !selectedCreditValue}
+                />
+              </Grid>
             </Form.Field>
           </Form.Group>
+          <Modal
+            onClose={() => setOpen(false)}
+            onOpen={() => setOpen(true)}
+            open={open}
+            className="grey-colored-btn"
+          >
+            <Modal.Header>
+              {!accValue && !selectedCreditValue
+                ? "Въведи всички полета правилно!"
+                : "Вноската е успещна"}
+            </Modal.Header>
+            <Modal.Actions>
+              <Button
+                content="Okey"
+                labelPosition="right"
+                icon="checkmark"
+                className="grey-colored-btn"
+                onClick={() => {
+                  setOpen(false);
+                  setAccValue(null);
+                  setSelectedAccount(null);
+                  setSelectedCredit(null);
+                  setSelectedCreditValue(null);
+                }}
+              />
+            </Modal.Actions>
+          </Modal>
         </Form>
       </Segment>
     </div>

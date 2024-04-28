@@ -15,10 +15,10 @@ import {
 import { fetchOptions } from "./RequestService/RequestCard";
 import useFetch from "../../useFetch";
 
-export function getFormattedDate() {
+export function getFormattedDate(months = 0) {
   const today = new Date();
   const day = String(today.getDate()).padStart(2, "0"); // Get the day and pad with leading zero if necessary
-  const month = String(today.getMonth() + 1).padStart(2, "0"); // Get the month (zero-based) and pad with leading zero if necessary
+  const month = String(today.getMonth() + 1 + months).padStart(2, "0"); // Get the month (zero-based) and pad with leading zero if necessary
   const year = today.getFullYear(); // Get the full year
 
   // Return the formatted date string in dd.mm.yyyy format
@@ -28,6 +28,15 @@ export function findAccountById(accounts, targetId) {
   for (let i = 0; i < accounts.length; i++) {
     if (accounts[i].id === targetId) {
       return accounts[i];
+    }
+  }
+  return null;
+}
+
+export function findCardById(cards, targetId) {
+  for (let i = 0; i < cards.length; i++) {
+    if (cards[i].id === targetId) {
+      return cards[i];
     }
   }
   return null;
@@ -64,24 +73,22 @@ const PaymentViaCode = ({ text }) => {
   );
 
   let displayModal = (e) => {
+    setIsPaymentSuccess(false);
     setIsCodeInvalid(false);
     if (codePaymentRaw.data) {
       if (code.length === 10) {
         if (codePaymentRaw.data.map((code) => code.id).includes(code)) {
           codePaymentRaw.data.forEach((payment) => {
             if (+code === +payment.id) {
-              setCurrPayment(payment);
               setIsCodeInvalid(false);
+              setCurrPayment(payment);
+              setOpen(true);
             }
           });
         } else {
+          setIsCodeInvalid(true);
         }
-      } else {
-        return false;
       }
-    }
-    if (isCodeInvalid) {
-      setOpen(true);
     }
   };
 
@@ -94,7 +101,7 @@ const PaymentViaCode = ({ text }) => {
         type: "expense",
         date: getFormattedDate(),
         description: "Payment via 10digit code",
-        amount: -currPayment.price,
+        amount: -currPayment.price.toFixed(2),
       });
       fetch("http://localhost:3002/bank_accounts/" + selectedAccount.id, {
         method: "PATCH",
@@ -116,9 +123,10 @@ const PaymentViaCode = ({ text }) => {
       );
 
       setCurrPayment(null);
-      setIsPaymentSuccess(true);
-      //   -> display message about completed
       setOpen(false);
+      setIsPaymentSuccess(true);
+      setSelectedAccount(null);
+      //   -> display message about completed
     } else {
       setIsMissingMoney(true);
       //   -> errorMessage in the dialog saying 'Unsufficient balance.Please change the payment method.
@@ -140,22 +148,37 @@ const PaymentViaCode = ({ text }) => {
         <Header
           textAlign="center"
           style={{
-            display: isCodeInvalid || isPaymentSuccess ? "block" : "none",
+            display: isCodeInvalid ? "block" : "none",
           }}
         >
-          {isCodeInvalid
-            ? "No obligation with the given code was found."
-            : isPaymentSuccess
-            ? "Successful Payment"
-            : " "}
+          {isCodeInvalid ? "No obligation with the given code was found." : " "}
         </Header>
+        <Header
+          textAlign="center"
+          style={{
+            display: isPaymentSuccess ? "block" : "none",
+          }}
+        >
+          {isPaymentSuccess ? "Successful Payment" : " "}
+        </Header>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Button
+            content="Провери"
+            color="green"
+            onClick={displayModal}
+            disabled={code.length === 10 ? false : true}
+          />
+        </div>
         <Modal
           onClose={() => setOpen(false)}
           onOpen={() => setOpen(true)}
           open={open}
-          trigger={
-            <Button content="Провери" color="green" onClick={displayModal} />
-          }
         >
           <Modal.Header className="ui centered">
             {" "}

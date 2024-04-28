@@ -100,9 +100,19 @@ const RequestCard = ({ text, type }) => {
                 open={open}
                 className="grey-colored-btn"
                 trigger={
-                  <Grid centered>
-                    <Button content="Заяви" className="grey-colored-btn" />
-                  </Grid>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Button
+                      content="Заяви"
+                      className="grey-colored-btn"
+                      disabled={!officeValue || !accValue}
+                    />
+                  </div>
                 }
               >
                 <Modal.Header>Заявката е изпратена.</Modal.Header>

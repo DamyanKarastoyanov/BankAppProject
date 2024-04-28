@@ -15,9 +15,15 @@ const setServiceType = (service) => {
   }
 };
 
+const branchesInfo = {
+  132: "ул. Хан Крум 12, 9000, Варна",
+  515: "ул. Витоша, 1000, София",
+  654: "ул. Цар Ивайло 8, 4000, Пловдив",
+  974: "ул. Цар Борис III, 70, 5800 Плевен",
+};
+
 const ProfileCard = () => {
   let currUser = JSON.parse(sessionStorage.getItem("username"));
-  let currGender = JSON.parse(sessionStorage.getItem("gender"));
   let { data, loading, error } = useFetch(
     "http://localhost:3002/cashier_requests?user=" + currUser,
     {
@@ -27,8 +33,6 @@ const ProfileCard = () => {
       },
     }
   );
-
-  console.log(data);
 
   let caseMessages = {
     red: "Искането се приготвя. Може да отнеме от 5-10 работни дни",
@@ -44,11 +48,7 @@ const ProfileCard = () => {
             <Image circular size="medium" src={erika} />{" "}
           </Grid.Column>
           <Grid.Column verticalAlign="middle" width={3}>
-            <Header size="huge">
-              {" "}
-              Добре дош{currGender === "female" ? "ла" : "ъл"}, <br />{" "}
-              {currUser}
-            </Header>
+            <Header size="huge">{currUser}</Header>
           </Grid.Column>
           <Grid.Column verticalAlign="middle" width={7}>
             <Header> Касови заявки: </Header>
@@ -74,7 +74,8 @@ const ProfileCard = () => {
                           content={
                             "Адреса на клон " +
                             caseService.branch +
-                            " се намира..."
+                            " се намира на адрес: " +
+                            branchesInfo[caseService.branch]
                           }
                           position="top center"
                           size="tiny"

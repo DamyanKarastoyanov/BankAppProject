@@ -7,16 +7,16 @@ import {
   Popup,
   Segment,
 } from "semantic-ui-react";
+import useFetch from "../../useFetch";
+import { fetchOptions } from "../Services/RequestService/RequestCard";
 
 const ContactUs = () => {
   return (
     <Grid rows={3} columns={3}>
       <Grid.Row />
-      <Grid.Row />
       <Grid.Row rows={2}>
         <Grid.Column />
         <Grid.Column>
-          {" "}
           <Segment textAlign="center" className="contact-container">
             <Header> Contact Information</Header>
             <br />{" "}
@@ -34,7 +34,7 @@ const ContactUs = () => {
             </Grid>
           </Segment>
         </Grid.Column>
-        <Grid.Column />
+        <Grid.Column></Grid.Column>
       </Grid.Row>
     </Grid>
   );
