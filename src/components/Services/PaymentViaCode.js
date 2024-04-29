@@ -151,7 +151,9 @@ const PaymentViaCode = ({ text }) => {
             display: isCodeInvalid ? "block" : "none",
           }}
         >
-          {isCodeInvalid ? "No obligation with the given code was found." : " "}
+          {isCodeInvalid
+            ? "Задължение за плащане с дадения код не беше намерено."
+            : " "}
         </Header>
         <Header
           textAlign="center"
@@ -159,7 +161,7 @@ const PaymentViaCode = ({ text }) => {
             display: isPaymentSuccess ? "block" : "none",
           }}
         >
-          {isPaymentSuccess ? "Successful Payment" : " "}
+          {isPaymentSuccess ? "Успешно плащане" : " "}
         </Header>
         <div
           style={{
@@ -229,7 +231,7 @@ const PaymentViaCode = ({ text }) => {
             textAlign="right"
             style={{ display: isMissingMoney ? "block" : "none" }}
           >
-            Missing missing funds, please select another account.
+            Липсваща наличност, моля посочете нова сметка.
           </Header>
           <Modal.Actions>
             <Button

@@ -63,7 +63,7 @@ const InstallmentInCard = ({ text }) => {
       // -> substract the value in account balance
       selectedAccount.balance -= moneyValue;
       // -> add the value in credit card
-      selectedCard["current_balance"] += moneyValue;
+      selectedCard["current_balance"] += +moneyValue;
       // -> add transaction regarding that
       selectedAccount.transactions.push({
         type: "expense",

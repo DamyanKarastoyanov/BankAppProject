@@ -2,20 +2,18 @@
   "loginData": [
     {
       "id": "1",
-      "user": "Erika",
-      "gender": "female",
+      "user": "user1",
       "password": "123123",
       "details_id": "312645",
-      "saved_emails": ["ehaeha123@gmail.com", "ugabuga123@abv.bg"],
+      "saved_emails": ["mockmail1@gmail.com", "mockmail2@abv.bg"],
       "saved_phone_numbers": ["0894621548"]
     },
     {
       "id": "2",
       "user": "admin",
-      "gender": "male",
       "password": "admin",
       "details_id": "admin",
-      "saved_emails": ["ehaeha123@gmail.com", "ugabuga123@abv.bg"],
+      "saved_emails": ["mockmail1@gmail.com", "mockmail2@abv.bg"],
       "saved_phone_numbers": ["0892343785"]
     }
   ],
@@ -44,12 +42,38 @@
   ],
   "created_cards": [
     {
+      "user": "user1",
+      "id": "9876",
+      "cardType": "credit",
+      "cardNumber": "** 1234",
+      "expireDate": "8/26",
+      "current_balance": 1500.75,
+      "24h_limit_withdrawing": 500,
+      "24h_limit_purchase": 1000,
+      "24h_total_limit": 1500,
+      "status": "active",
+      "clickable": true
+    },
+    {
+      "user": "user1",
+      "id": "7890",
+      "cardType": "debit",
+      "cardNumber": "** 5678",
+      "expireDate": "9/27",
+      "current_balance": 100.5,
+      "24h_limit_withdrawing": 1000,
+      "24h_limit_purchase": 800,
+      "24h_total_limit": 1800,
+      "status": "active",
+      "clickable": true
+    },
+    {
       "user": "admin",
       "id": "4523",
       "cardType": "debit",
       "cardNumber": "** 9878",
       "expireDate": "5/25",
-      "current_balance": 20.3,
+      "current_balance": 20.31,
       "24h_limit_withdrawing": 2000,
       "24h_limit_purchase": 1500,
       "24h_total_limit": 2500,
@@ -62,7 +86,7 @@
       "cardType": "credit",
       "cardNumber": "** 9458",
       "expireDate": "3/26",
-      "current_balance": "10.31212",
+      "current_balance": 133.97,
       "24h_limit_withdrawing": 2000,
       "24h_limit_purchase": 1500,
       "24h_total_limit": 2500,
@@ -94,7 +118,7 @@
       "yearsOfCredit": 2
     },
     {
-      "user": "admin",
+      "user": "user1",
       "id": "l3987",
       "type": "Автомобилен",
       "primalPrice": 3000,
@@ -116,19 +140,13 @@
   ],
   "bank_accounts": [
     {
-      "user": "admin",
+      "user": "user1",
       "id": "87987",
       "name": "Разплащателна сметка",
       "flag": "bg",
       "currency": "BGN",
-      "balance": 9342,
+      "balance": 102.91,
       "transactions": [
-        {
-          "type": "expense",
-          "date": "23.03.2024",
-          "description": "Maint fee uncollected",
-          "amount": 24.54
-        },
         {
           "type": "expense",
           "date": "27.04.2024",
@@ -138,8 +156,47 @@
         {
           "type": "expense",
           "date": "28.04.2024",
+          "description": "E-vignettes",
+          "amount": -23
+        }
+      ]
+    },
+    {
+      "user": "user1",
+      "id": "87987",
+      "name": "Разплащателна сметка",
+      "flag": "bg",
+      "currency": "BGN",
+      "balance": 302.1,
+      "transactions": [
+        {
+          "type": "expense",
+          "date": "28.04.2024",
+          "description": "E-vignettes",
+          "amount": -23
+        },
+        {
+          "type": "expense",
+          "date": "29.04.2024",
           "description": "Recharging credit card ** 9458",
-          "amount": -12
+          "amount": -123
+        }
+      ]
+    },
+
+    {
+      "user": "admin",
+      "id": "87987",
+      "name": "Разплащателна сметка",
+      "flag": "bg",
+      "currency": "BGN",
+      "balance": 8973,
+      "transactions": [
+        {
+          "type": "expense",
+          "date": "27.04.2024",
+          "description": "Payment via 10digit code",
+          "amount": -100
         },
         {
           "type": "expense",
@@ -149,9 +206,9 @@
         },
         {
           "type": "expense",
-          "date": "28.04.2024",
-          "description": "Вноска 200 в Потребителски",
-          "amount": -200
+          "date": "29.04.2024",
+          "description": "Recharging credit card ** 9458",
+          "amount": -123
         }
       ]
     },
@@ -161,7 +218,7 @@
       "name": "Кредитна сметка",
       "flag": "bg",
       "currency": "BGN",
-      "balance": 7615.459999999999,
+      "balance": 7437.45,
       "transactions": [
         {
           "type": "income",
@@ -221,10 +278,17 @@
       "status": "reviewing"
     },
     {
-      "id": 14007,
+      "id": 18685,
       "user": "admin",
-      "service": "Document: Удостоверение за банкова сметка",
+      "service": "Withdrawing 200 BGN",
       "branch": 515,
+      "status": "reviewing"
+    },
+    {
+      "id": 11002,
+      "user": "admin",
+      "service": "Издаване на документ: Удостоверение за банкова сметка",
+      "branch": 974,
       "status": "reviewing"
     }
   ],
@@ -368,6 +432,14 @@
       "endDate": "28.07.2024",
       "amountOfMonths": 3,
       "carNumber": "B 1987 BM"
+    },
+    {
+      "id": 30898,
+      "user": "admin",
+      "startDate": "29.04.2024",
+      "endDate": "29.07.2024",
+      "amountOfMonths": 3,
+      "carNumber": "5342"
     }
   ],
   "tester": [

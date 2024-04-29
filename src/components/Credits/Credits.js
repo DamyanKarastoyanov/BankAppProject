@@ -67,7 +67,7 @@ const CreditInfo = ({ credit }) => {
 const CreditList = () => {
   let currUser = JSON.parse(sessionStorage.getItem("username"));
   let { data, isLoading, error } = useFetch(
-    "http://localhost:3002/taken_credits?user" + currUser,
+    "http://localhost:3002/taken_credits?user=" + currUser,
     {
       method: "GET",
       headers: {

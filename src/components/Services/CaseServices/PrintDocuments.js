@@ -57,7 +57,7 @@ const PrintDocuments = ({ text }) => {
       const caseService = {
         id: Math.floor((Math.random() + 1) * 9999),
         user: currUser,
-        service: `Document: ${selectedDocument}`,
+        service: `Издаване на документ: ${selectedDocument}`,
         branch: officeValue,
         status: "reviewing",
       };
